@@ -3,6 +3,8 @@
 
 # Log file
 *.log
+.idea
+cdp.learn.java8.iml
 
 # BlueJ files
 *.ctxt

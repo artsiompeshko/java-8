@@ -10,7 +10,7 @@ public class Java8ParallelAggregator implements Aggregator {
     @Override
     public int sum(List<Integer> numbers) {
         if (numbers == null) {
-            return 0;
+            throw new IllegalArgumentException("numbers should not be null");
         }
 
         return numbers.parallelStream()
@@ -19,8 +19,12 @@ public class Java8ParallelAggregator implements Aggregator {
 
     @Override
     public List<Pair<String, Long>> getMostFrequentWords(List<String> words, long limit) {
-        if (words == null || limit < 0) {
-            return null;
+        if (words == null) {
+            throw new IllegalArgumentException("words should not be null");
+        }
+
+        if (limit < 0) {
+            throw new IllegalArgumentException("limit should be positive number");
         }
 
         return words.parallelStream()
@@ -40,9 +44,12 @@ public class Java8ParallelAggregator implements Aggregator {
 
     @Override
     public List<String> getDuplicates(List<String> words, long limit) {
+        if (words == null) {
+            throw new IllegalArgumentException("words should not be null");
+        }
 
-        if (words == null || limit < 0) {
-            return null;
+        if (limit < 0) {
+            throw new IllegalArgumentException("limit should be positive number");
         }
 
         return words.parallelStream()

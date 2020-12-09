@@ -9,7 +9,7 @@ public class Java7Aggregator implements Aggregator {
     @Override
     public int sum(List<Integer> numbers) {
         if (numbers == null) {
-            return 0;
+            throw new IllegalArgumentException("numbers should not be null");
         }
 
         int sum = 0;
@@ -23,8 +23,12 @@ public class Java7Aggregator implements Aggregator {
 
     @Override
     public List<Pair<String, Long>> getMostFrequentWords(List<String> words, long limit) {
-        if (words == null || limit < 0) {
-            return null;
+        if (words == null) {
+            throw new IllegalArgumentException("words should not be null");
+        }
+
+        if (limit < 0) {
+            throw new IllegalArgumentException("limit should be positive number");
         }
 
         Map<String, Pair<String, Long>> wordCounts = new HashMap<>();
@@ -61,24 +65,15 @@ public class Java7Aggregator implements Aggregator {
 
     @Override
     public List<String> getDuplicates(List<String> words, long limit) {
-        if (words == null || limit < 0) {
-            return null;
+        if (words == null) {
+            throw new IllegalArgumentException("words should not be null");
         }
 
-        Set<String> duplicates = new HashSet<>();
-        Set<String> entries = new HashSet<>();
-
-        for (String word : words) {
-            if (entries.contains(word.toLowerCase())) {
-                duplicates.add(word.toUpperCase());
-            } else {
-                entries.add(word.toLowerCase());
-            }
+        if (limit < 0) {
+            throw new IllegalArgumentException("limit should be positive number");
         }
 
-        List<String> result = new ArrayList<>(duplicates);
-
-        result.sort(new Comparator<String>() {
+        Set<String> duplicates = new TreeSet<>(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
                 if (o1.length() == o2.length()) {
@@ -88,6 +83,15 @@ public class Java7Aggregator implements Aggregator {
                 return o1.length() - o2.length();
             }
         });
+        Set<String> entries = new HashSet<>();
+
+        for (String word : words) {
+            if (!entries.add(word.toLowerCase())) {
+                duplicates.add(word.toUpperCase());
+            }
+        }
+
+        List<String> result = new ArrayList<>(duplicates);
 
         return result.subList(0, limit > result.size() ? result.size() : (int) limit);
     }

@@ -5,6 +5,7 @@
 *.log
 .idea
 cdp.learn.java8.iml
+target/
 
 # BlueJ files
 *.ctxt
